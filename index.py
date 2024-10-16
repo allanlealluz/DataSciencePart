@@ -1,32 +1,47 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.cluster import KMeans
+import random
 
-# Gerando notas fictícias para 100 alunos
-np.random.seed(42)
-notas_matematica = np.random.randint(50, 101, size=100)  # Notas de Matemática entre 50 e 100
-notas_ciencias = np.random.randint(50, 101, size=100)    # Notas de Ciências entre 50 e 100
+# Função para simular dados de feedbacks
+def generate_feedbacks(num_aulas, num_alunos):
+    feedbacks = {}
+    for aula_id in range(num_aulas):
+        feedbacks[f'Aula {aula_id + 1}'] = [
+            {
+                'nome': f'Aluno {random.randint(1, num_alunos)}',
+                'pergunta': f'Pergunta {random.randint(1, 5)}',
+                'resposta': random.choice(['Ótimo', 'Bom', 'Regular', 'Ruim'])
+            }
+            for _ in range(random.randint(1, num_alunos))
+        ]
+    return feedbacks
 
-# Combinando as notas em um array 2D
-X = np.array(list(zip(notas_matematica, notas_ciencias)))
+# Função para simular progresso
+def generate_progresso(num_aulas, num_alunos):
+    progresso = {}
+    for aula_id in range(num_aulas):
+        progresso[f'Aula {aula_id + 1}'] = [
+            {
+                'nome': f'Aluno {random.randint(1, num_alunos)}',
+                'progresso': random.randint(0, 100)
+            }
+            for _ in range(num_alunos)
+        ]
+    return progresso
 
-# Aplicando K-Means para encontrar 3 grupos de alunos
-kmeans = KMeans(n_clusters=3, random_state=42)
-kmeans.fit(X)
-labels = kmeans.labels_
+# Simulando dados
+num_aulas = 3
+num_alunos = 10
+feedbacks = generate_feedbacks(num_aulas, num_alunos)
+progresso = generate_progresso(num_aulas, num_alunos)
 
-# Visualizando os resultados
-plt.figure(figsize=(10, 6))
-plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', marker='o', edgecolor='k', s=100)
+# Exibindo os resultados
+print("Feedbacks:")
+for aula, feedback in feedbacks.items():
+    print(f"{aula}:")
+    for f in feedback:
+        print(f"  {f['nome']} - {f['pergunta']}: {f['resposta']}")
 
-# Centróides
-centroids = kmeans.cluster_centers_
-plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='X', s=200)
-
-plt.title('Agrupamento de Alunos por Notas em Matemática e Ciências')
-plt.xlabel('Notas em Matemática')
-plt.ylabel('Notas em Ciências')
-plt.grid()
-plt.xlim(40, 110)
-plt.ylim(40, 110)
-plt.show()
+print("\nProgresso:")
+for aula, prog in progresso.items():
+    print(f"{aula}:")
+    for p in prog:
+        print(f"  {p['nome']} - Progresso: {p['progresso']}%")
