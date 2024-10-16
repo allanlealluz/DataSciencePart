@@ -65,7 +65,7 @@ labels = kmeans.fit_predict(X)
 plt.figure(figsize=(10, 6))
 scatter = plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', marker='o', edgecolor='k', s=100)
 
-# Centróides
+# Centróides ofc
 centroids = kmeans.cluster_centers_
 plt.scatter(centroids[:, 0], centroids[:, 1], c='red', marker='X', s=200, label='Centroides')
 
